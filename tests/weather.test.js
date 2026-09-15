@@ -27,6 +27,11 @@ test("código 61 corresponde a Lluvia", () => {
   assert.equal(getWeatherCondition(61), "Lluvia 🌧️");
 });
 
+test("códigos 56 y 57 corresponden a Llovizna", () => {
+  assert.equal(getWeatherCondition(56), "Llovizna 🌦️");
+  assert.equal(getWeatherCondition(57), "Llovizna 🌦️");
+});
+
 test("código 95 corresponde a Tormenta", () => {
   assert.equal(getWeatherCondition(95), "Tormenta ⛈️");
 });

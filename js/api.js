@@ -1,31 +1,16 @@
-import { transformWeatherData } from "./weather.js";
+import {
+  InvalidForecastError,
+  transformWeatherData,
+} from "./weather.js";
 
 const API_ENDPOINT = "https://api.open-meteo.com/v1/forecast";
 const REQUEST_TIMEOUT_MS = 10_000;
 
-function createApiError(message, cause) {
+function createApiError(message, cause, code) {
   const error = new Error(message, { cause });
+  error.code = code;
   console.error(`[weather-api] ${message}`, cause);
   return error;
-}
-
-function validateDailyResponse(response) {
-  const daily = response?.daily;
-  const requiredFields = [
-    "time",
-    "temperature_2m_max",
-    "temperature_2m_min",
-    "weather_code",
-  ];
-
-  const hasRequiredArrays =
-    daily && requiredFields.every((field) => Array.isArray(daily[field]));
-  const hasSevenDays =
-    hasRequiredArrays && requiredFields.every((field) => daily[field].length === 7);
-
-  if (!hasSevenDays) {
-    throw new TypeError("La respuesta no contiene 7 días de datos meteorológicos.");
-  }
 }
 
 export function buildForecastUrl({ latitude, longitude }) {
@@ -51,32 +36,35 @@ export async function fetchWeatherForecast(city) {
     });
 
     if (!response.ok) {
-      throw new Error(`Open-Meteo respondió con HTTP ${response.status}.`);
+      throw createApiError(
+        "No fue posible obtener el pronóstico del servidor.",
+        new Error(`Open-Meteo respondió con HTTP ${response.status}.`),
+        "http",
+      );
     }
 
     let rawResponse;
     try {
       rawResponse = await response.json();
     } catch (error) {
-      throw createApiError("La respuesta de Open-Meteo no contiene JSON válido.", error);
+      throw createApiError(
+        "La respuesta de Open-Meteo no contiene JSON válido.",
+        error,
+        "invalid-json",
+      );
     }
 
-    try {
-      validateDailyResponse(rawResponse);
-      return transformWeatherData(rawResponse);
-    } catch (error) {
-      throw createApiError("La respuesta de Open-Meteo tiene una estructura inválida.", error);
-    }
+    return transformWeatherData(rawResponse);
   } catch (error) {
+    if (error instanceof InvalidForecastError) {
+      throw error;
+    }
+
     if (error.name === "AbortError") {
       throw createApiError("La solicitud meteorológica excedió los 10 segundos.", error);
     }
 
-    if (error.message?.startsWith("Open-Meteo respondió con HTTP")) {
-      throw createApiError("No fue posible obtener el pronóstico del servidor.", error);
-    }
-
-    if (error.message?.startsWith("La respuesta de Open-Meteo")) {
+    if (error.code === "http" || error.code === "invalid-json") {
       throw error;
     }
 
