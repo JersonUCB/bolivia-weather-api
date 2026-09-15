@@ -1,0 +1,80 @@
+:root {
+  color-scheme: light;
+  font-family: Arial, sans-serif;
+  color: #1f2933;
+  background-color: #f4f7f9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+.container {
+  width: min(100% - 2rem, 72rem);
+  margin: 0 auto;
+}
+
+.site-header {
+  padding: 2.5rem 0;
+  color: #ffffff;
+  background-color: #155e75;
+}
+
+.site-header h1,
+.site-header p {
+  margin: 0;
+}
+
+.site-header p {
+  margin-top: 0.75rem;
+  max-width: 42rem;
+  line-height: 1.5;
+}
+
+main {
+  padding: 2rem 0 3rem;
+}
+
+h2 {
+  margin: 0 0 1rem;
+  color: #163242;
+}
+
+.status-message {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.375rem;
+  background-color: #ffffff;
+}
+
+.error-message {
+  color: #991b1b;
+  border-color: #fecaca;
+  background-color: #fef2f2;
+}
+
+.cities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 700px) {
+  .container {
+    width: min(100% - 1.5rem, 42rem);
+  }
+
+  .site-header {
+    padding: 2rem 0;
+  }
+
+  .cities-grid {
+    grid-template-columns: 1fr;
+  }
+}

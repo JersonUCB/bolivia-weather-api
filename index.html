@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Pronóstico del tiempo para las capitales de Bolivia."
+    />
+    <title>Clima de Bolivia</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <script type="module" src="js/config.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1>Clima de Bolivia</h1>
+        <p>Consulta el pronóstico de 7 días para las capitales de Bolivia.</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section aria-labelledby="cities-heading">
+        <h2 id="cities-heading">Capitales</h2>
+
+        <div id="loading-state" class="status-message" role="status">
+          Cargando pronóstico...
+        </div>
+
+        <div id="general-error" class="status-message error-message" role="alert" hidden>
+          No fue posible cargar el pronóstico.
+        </div>
+
+        <div id="cities-container" class="cities-grid" aria-live="polite"></div>
+      </section>
+    </main>
+  </body>
+</html>
