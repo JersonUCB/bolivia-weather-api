@@ -1,17 +1,8 @@
 import { fetchWeatherForecast } from "./api.js";
 import { cities } from "./config.js";
+import * as ui from "./ui.js";
 
 const cityStates = new Map();
-
-// These no-op renderers define the contract consumed by the next UI iteration.
-export const ui = {
-  renderLoadingState() {},
-  renderCityLoading() {},
-  renderCitySuccess() {},
-  renderCityError() {},
-  renderGeneralError() {},
-  clearGeneralError() {},
-};
 
 function updateCityState(city, state) {
   cityStates.set(city.name, { city, ...state });
@@ -60,6 +51,8 @@ export async function loadForecasts(
 
     handleCityError(city, result.reason, renderer, fetchForecast);
   });
+
+  renderer.renderLoadingComplete?.();
 
   if (results.every((result) => result.status === "rejected")) {
     renderer.renderGeneralError(() =>
