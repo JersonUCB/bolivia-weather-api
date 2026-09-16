@@ -9,6 +9,7 @@ const WEATHER_CONDITIONS = [
   { min: 61, max: 67, label: "Lluvia", emoji: "🌧️" },
   { min: 71, max: 77, label: "Nieve", emoji: "❄️" },
   { min: 80, max: 82, label: "Chubascos", emoji: "🌧️" },
+  { min: 85, max: 86, label: "Chubascos de nieve", emoji: "🌨️" },
   { min: 95, max: 99, label: "Tormenta", emoji: "⛈️" },
 ];
 

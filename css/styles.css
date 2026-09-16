@@ -53,6 +53,10 @@ h2 {
   background-color: #ffffff;
 }
 
+.status-message[hidden] {
+  display: none;
+}
+
 .error-message {
   color: #991b1b;
   border-color: #fecaca;
@@ -63,6 +67,91 @@ h2 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
+}
+
+.city-card {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.375rem;
+  background-color: #ffffff;
+}
+
+.city-card h3 {
+  margin: 0 0 1rem;
+  color: #163242;
+  overflow-wrap: anywhere;
+}
+
+.city-card[aria-busy="true"] {
+  border-style: dashed;
+}
+
+.city-loading {
+  color: #334e68;
+}
+
+.city-error {
+  color: #991b1b;
+}
+
+.forecast-list {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.forecast-list li {
+  min-width: 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.forecast-list li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.forecast-list h4,
+.forecast-list p {
+  margin: 0;
+}
+
+.forecast-list h4 {
+  font-size: 1rem;
+}
+
+.forecast-list p {
+  margin-top: 0.25rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+button {
+  min-height: 2.75rem;
+  padding: 0.625rem 0.875rem;
+  border: 2px solid #0f4c5c;
+  border-radius: 0.375rem;
+  color: #ffffff;
+  background-color: #0f4c5c;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #083344;
+}
+
+button:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 2px;
+}
+
+.city-card button {
+  margin-top: 1rem;
 }
 
 @media (max-width: 700px) {

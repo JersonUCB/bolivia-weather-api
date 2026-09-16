@@ -92,6 +92,7 @@ export function renderCityError(city, error, onRetry) {
 
   retryButton.type = "button";
   retryButton.textContent = "Reintentar";
+  retryButton.setAttribute("aria-label", `Reintentar pronóstico de ${city.name}`);
   retryButton.addEventListener("click", onRetry, { once: true });
 
   card.replaceChildren(
@@ -111,6 +112,7 @@ export function renderGeneralError(onRetryAll) {
 
   retryButton.type = "button";
   retryButton.textContent = "Reintentar todo";
+  retryButton.setAttribute("aria-label", "Reintentar pronóstico de todas las ciudades");
   retryButton.addEventListener("click", onRetryAll, { once: true });
 
   generalError.replaceChildren(
@@ -130,5 +132,7 @@ export function clearGeneralError() {
 
 export function formatForecastDate(dateValue) {
   const date = new Date(`${dateValue}T12:00:00`);
-  return dateFormatter.format(date);
+  return Number.isNaN(date.getTime())
+    ? "Fecha no disponible"
+    : dateFormatter.format(date);
 }
