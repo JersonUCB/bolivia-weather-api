@@ -67,26 +67,36 @@ Esto no significa que Open-Meteo sea mejor para todos los productos. La elecció
 
 ## Architecture
 
-La arquitectura es deliberadamente ligera:
+La arquitectura es **deliberadamente ligera**. El proyecto tiene un alcance muy pequeño (una página, 9 ciudades, una API externa, sin autenticación, sin base de datos, sin routing), por lo que introducir capas adicionales o patrones como Clean Architecture, Repository o inyección de dependencias sería **sobre-ingeniería sin beneficio real**.
 
-```text
-config.js -> app.js -> api.js -> Open-Meteo
-                         |
-                         v
-                      weather.js
-                         |
-                         v
-app.js -> ui.js -> DOM
+### Flujo de datos
+
+```mermaid
+flowchart TD
+    A[config.js<br/>ciudades + coords] --> B[app.js<br/>orquestación]
+    B --> C[api.js<br/>fetch + timeout]
+    C --> D[(Open-Meteo)]
+    D --> E[weather.js<br/>lógica pura]
+    E --> B
+    B --> F[ui.js<br/>render DOM]
+    F --> G([DOM])
 ```
 
-- `js/config.js`: lista de ciudades y coordenadas.
-- `js/api.js`: construye URLs, realiza `fetch`, aplica timeout y clasifica errores de transporte.
-- `js/weather.js`: valida la respuesta, mapea códigos WMO y transforma los datos al formato de la aplicación.
-- `js/app.js`: coordina cargas paralelas, estados por ciudad y reintentos.
-- `js/ui.js`: crea y actualiza elementos del DOM. No realiza llamadas de red.
-- `index.html`: estructura semántica inicial y punto de entrada de `app.js`.
-- `css/styles.css`: layout responsive, legibilidad y estados visuales.
-- `tests/weather.test.js`: pruebas de la lógica pura de clima.
+En palabras: `app.js` lee la configuración, pide los datos a `api.js`, este consulta Open-Meteo y delega la transformación a `weather.js`, el resultado vuelve a `app.js` y finalmente se renderiza con `ui.js`.
+
+### Responsabilidades por archivo
+
+| Archivo | Responsabilidad | No hace |
+|---|---|---|
+| `js/config.js` | Lista de las 9 ciudades y sus coordenadas (datos estáticos). | No accede al DOM ni hace fetch. |
+| `js/api.js` | Construye la URL, ejecuta `fetch`, aplica timeout con `AbortController`, valida la respuesta HTTP y clasifica errores de transporte. | No toca el DOM ni conoce la forma final del forecast. |
+| `js/weather.js` | Lógica pura: valida la respuesta cruda, mapea códigos WMO a condición + emoji, y transforma al formato de la aplicación (`{ fecha, tempMax, tempMin, condicion }`). | No accede al DOM, no hace fetch, no depende del navegador. Es testeable con `node:test`. |
+| `js/app.js` | Orquesta: lee configuración, lanza cargas paralelas con `Promise.allSettled`, gestiona estados por ciudad y reintentos. | No hace fetch directo ni manipula el DOM. |
+| `js/ui.js` | Crea y actualiza elementos del DOM. Renderiza loading, error y forecast. | No realiza llamadas de red ni conoce la estructura cruda de Open-Meteo. |
+| `index.html` | Estructura semántica inicial y punto de entrada de `app.js`. | — |
+| `css/styles.css` | Layout responsive, legibilidad y estados visuales. | — |
+| `tests/weather.test.js` | Pruebas de la lógica pura de clima con `node:test` y `node:assert`. | — |
+
 
 Se evitó intencionalmente una arquitectura más compleja porque el proyecto tiene una sola pantalla, una integración externa y un flujo de datos pequeño. Añadir estado global, routing, componentes, un framework o un sistema de inyección más elaborado aumentaría el coste de mantenimiento sin aportar valor proporcional en este alcance.
 
