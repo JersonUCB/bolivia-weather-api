@@ -1,6 +1,9 @@
 # Clima de Bolivia
 
 Aplicación web pequeña para consultar el pronóstico de siete días de las nueve capitales de Bolivia. La aplicación consume Open-Meteo, transforma y valida la respuesta, y renderiza cada ciudad de forma independiente.
+## Demo
+
+🔗 **Aplicación desplegada:** https://jersonucb.github.io/bolivia-weather-app/
 
 ## Overview
 
@@ -166,7 +169,7 @@ Esta sección documenta el uso real de herramientas de IA durante el desarrollo.
 ### Herramientas de IA utilizadas
 
 - **GitHub Copilot** — generación de código por iteraciones, revisión de
-  decisiones de diseño y explicación de fragmentos generados.
+  decisiones de diseño y soporte durante el debugging.
 - **Asistente conversacional (Kimi/ChatGPT)** — análisis de decisiones técnicas
   y revisión de código como parte del proceso de code review.
 
